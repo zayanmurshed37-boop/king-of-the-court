@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "King of the Court",
+    "slug": "king-of-the-court",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0A0A0A",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kingofthecourt.app"
+    },
+    "android": {
+      "package": "com.kingofthecourt.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#FF5A1F"
+      }
+    }
+  }
+}
