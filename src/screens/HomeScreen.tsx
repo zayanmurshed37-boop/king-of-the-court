@@ -83,7 +83,7 @@ export function HomeScreen({ navigate, notify }: { navigate: (tab: string) => vo
               <Text style={styles.distance}>{nearestCourt.distance}</Text>
             </View>
             <Text style={styles.courtName}>{nearestCourt.name}</Text>
-            <Text style={styles.gameMeta}>♛ {nearestCourt.king.name} rules this court</Text>
+            <Text style={styles.gameMeta}>{nearestCourt.king ? `♛ ${nearestCourt.king.name} rules this court` : 'No king yet'}</Text>
           </View>
         </Card>
       </Pressable>

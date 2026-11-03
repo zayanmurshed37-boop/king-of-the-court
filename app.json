@@ -15,6 +15,15 @@
       "adaptiveIcon": {
         "backgroundColor": "#FF5A1F"
       }
-    }
+    },
+    "plugins": [
+      "@rnmapbox/maps",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "King of the Court uses your location to find basketball courts near you."
+        }
+      ]
+    ]
   }
 }

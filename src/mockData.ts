@@ -1,4 +1,7 @@
-import { Court, OpenGame, Player, Squad } from './types';
+import { Coordinate, Court, OpenGame, Player, Squad } from './types';
+
+// Downtown Toronto; used for court search when location permission is denied or unavailable.
+export const defaultLocation: Coordinate = { latitude: 43.6578, longitude: -79.4128 };
 
 export const currentPlayer: Player = {
   id: 'me',
@@ -30,6 +33,7 @@ export const courts: Court[] = [
     name: 'Christie Pits Courts',
     neighborhood: 'Bloor & Christie',
     distance: '0.8 km',
+    coordinate: { latitude: 43.6645, longitude: -79.4206 },
     currentPlayers: 18,
     courts: 3,
     activity: 'Hot',
@@ -41,6 +45,7 @@ export const courts: Court[] = [
     name: 'Stanley Park',
     neighborhood: 'King West',
     distance: '1.6 km',
+    coordinate: { latitude: 43.6421, longitude: -79.4079 },
     currentPlayers: 9,
     courts: 2,
     activity: 'Active',
@@ -52,6 +57,7 @@ export const courts: Court[] = [
     name: 'Trinity Bellwoods',
     neighborhood: 'Queen West',
     distance: '2.1 km',
+    coordinate: { latitude: 43.6474, longitude: -79.4138 },
     currentPlayers: 4,
     courts: 2,
     activity: 'Quiet',

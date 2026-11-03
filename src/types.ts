@@ -13,15 +13,22 @@ export interface Player {
   online?: boolean;
 }
 
+export interface Coordinate {
+  latitude: number;
+  longitude: number;
+}
+
 export interface Court {
   id: string;
   name: string;
   neighborhood: string;
   distance: string;
+  coordinate: Coordinate;
   currentPlayers: number;
-  courts: number;
-  activity: 'Quiet' | 'Active' | 'Hot';
-  king: Player;
+  // Unknown for real courts until players check in.
+  courts?: number;
+  activity?: 'Quiet' | 'Active' | 'Hot';
+  king: Player | null;
   leaderboard: Player[];
 }
 

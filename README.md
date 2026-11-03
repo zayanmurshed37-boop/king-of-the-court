@@ -66,6 +66,8 @@ The current build includes five primary areas:
 - Expo SDK 57
 - React Native
 - TypeScript
+- Mapbox (`@rnmapbox/maps`) for the live court map
+- Real nearby basketball courts from the Mapbox Search Box API (`basketball_court` category), centred on the device location via `expo-location` (falls back to downtown Toronto if location is off). Courts have no players, kings or rankings until the backend exists, and the UI says so rather than inventing them.
 - Reusable UI components and design tokens
 - Typed player, game, squad, and court domain models
 - Isolated mock-data layer designed to be replaced by an API
@@ -93,19 +95,33 @@ Install the dependencies:
 pnpm install
 ```
 
-Start the Expo development server:
+### Mapbox token
+
+The Courts map uses [Mapbox](https://www.mapbox.com/) through `@rnmapbox/maps`. Create a free account, copy the **Default public token** (starts with `pk.`) from your [access tokens page](https://account.mapbox.com/access-tokens/), and add it to a `.env` file in the project root:
 
 ```bash
-pnpm start
+cp .env.example .env
+# then set EXPO_PUBLIC_MAPBOX_TOKEN=pk.your_token
 ```
 
-On macOS, the iOS Simulator can be opened with:
+`.env` is gitignored. Without a token the app still runs and the map shows a "Map unavailable" placeholder. The token is read when Metro bundles, so restart Metro (`pnpm start --clear`) after changing it.
+
+### Development build
+
+Mapbox is native code, so the app runs in a development build rather than Expo Go:
+
+```bash
+pnpm android   # builds, installs and launches on an Android emulator or device
+pnpm ios       # requires Xcode
+```
+
+Android builds need JDK 17+; Android Studio's bundled JDK works (`export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"`). After the first build, `pnpm start` is enough for JavaScript changes. Rebuild after changing native dependencies or `app.json` plugins. The committed `ios/` project needs `pnpm exec expo prebuild --platform ios` before Mapbox is linked on iOS.
+
+If Metro can't reach the iOS Simulator on macOS, start it with:
 
 ```bash
 NODE_OPTIONS=--dns-result-order=ipv4first pnpm exec expo start --localhost --clear
 ```
-
-Press `i` after Metro starts. Android can be opened from Expo by pressing `a` when an emulator is available.
 
 ## Product decisions
 
