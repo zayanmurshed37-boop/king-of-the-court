@@ -6,11 +6,23 @@ export interface Player {
   handle: string;
   initials: string;
   rating: number;
-  archetype: string;
+  // Confirmed games played; the rating is provisional until this reaches PROVISIONAL_GAMES.
+  ratedGames: number;
+  // Share of games attended and results confirmed (0–100). Tracked separately; never affects rating.
+  reliability: number;
   record: string;
   wins: number;
   accent: string;
   online?: boolean;
+}
+
+export interface RecentGame {
+  id: string;
+  mode: GameMode;
+  court: string;
+  result: 'W' | 'L';
+  score: string;
+  ratingChange: number;
 }
 
 export interface Coordinate {

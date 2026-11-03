@@ -21,18 +21,19 @@ King of the Court brings those decisions into one experience:
 
 ### NBA 2K-style overall rating
 
-Every player has an easy-to-read **OVR rating** and basketball archetype, giving opponents a quick picture of their skill level and playing style. The rating is intended to help players find competitive matchups—not simply reward whoever plays the most games.
+Every player has an easy-to-read **OVR rating** that helps them find fair matchups. It only measures what pickup basketball can honestly record: **who won, confirmed by both sides**. There are no attributes, archetypes, or box-score stats, because nobody keeps stats at a pickup run and self-reported numbers are easy to inflate.
 
-The current prototype demonstrates the rating interface with representative data. In production, new players would begin with a provisional rating that becomes more reliable as verified results are recorded. The proposed calculation is:
+The current prototype demonstrates the rating interface with representative data. In production:
 
-| Rating input | Weight | Purpose |
-| --- | ---: | --- |
-| Verified wins and losses | 55% | Rewards winning while adjusting for opponent strength |
-| Game-mode-specific efficiency | 25% | Recognizes individual performance without treating 1v1 and team basketball identically |
-| Sportsmanship confirmation | 10% | Encourages reliable attendance, honest reporting, and positive play |
-| Activity and recency | 10% | Keeps ratings current through a limited, conservative recency adjustment |
+| Rule | How it works |
+| --- | --- |
+| Results only | OVR comes from confirmed wins and losses, adjusted for opponent strength (Glicko-style). Beating a stronger player gains more. |
+| Team games | Each team's average rating is compared; everyone on the winning side gains, everyone on the losing side drops. |
+| Provisional start | New players start at 70 and show **PROV** for their first 10 confirmed games while the rating settles. |
+| Reliability is separate | Showing up and confirming results builds a reliability %. It can gate ranked games but never changes OVR. |
+| Activity is separate | Level and XP reward playing, not winning, and are labelled so they aren't mistaken for skill. |
 
-Rating changes would be calculated on a trusted backend rather than on the player's device. Each change would appear in an auditable match history, with per-game limits, provisional ratings, result confirmation, and diminishing effects from repeatedly playing the same opponent. Those safeguards are designed to make the rating credible and harder to manipulate.
+After a game, one player enters the final score and the others confirm it with one tap. That's the only input the rating needs. Rating changes would be calculated on a trusted backend rather than on the player's device, and each change appears in the player's recent games, with per-game limits and diminishing effects from repeatedly playing the same opponent. Those safeguards are designed to make the rating credible and harder to manipulate.
 
 ### King of the Court
 
@@ -59,7 +60,7 @@ The current build includes five primary areas:
 | Play | 1v1/team filters, ranked and casual games, and match requests |
 | Courts | Nearby-court activity, court details, rankings, and King challenges |
 | Squad | 2v2–5v5 roster selection, invitations, and opponent search |
-| Profile | Overall rating, attributes, progression, record, and friends |
+| Profile | Overall rating, recent games with rating changes, reliability, activity level, record, and friends |
 
 ## Technology
 
@@ -141,7 +142,7 @@ NODE_OPTIONS=--dns-result-order=ipv4first pnpm exec expo start --localhost --cle
 - Join and challenge feedback
 - Squad-size and friend-invite interactions
 - Court activity and leaderboard detail views
-- Player card, attributes, and progression UI
+- Player card, recent games, reliability, and activity-level UI
 
 ### Next
 

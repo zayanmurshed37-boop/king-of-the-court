@@ -48,7 +48,7 @@ Games are filtered by format, distance, start time, available spots, and rating 
 
 ### Player ratings
 
-The proposed rating system combines opponent-adjusted results with verified performance statistics. New players begin provisionally, repeat opponents produce diminishing rating effects, and every change appears in match history.
+The proposed rating system uses only opponent-adjusted results that both sides have confirmed. Pickup games have no stat-keeper, so the app deliberately avoids made-up sub-ratings such as shooting or defense. New players begin provisionally, repeat opponents produce diminishing rating effects, and every change appears in the player's recent games. Reliability (showing up and confirming results) is tracked separately and never changes the rating.
 
 ### Court presence
 

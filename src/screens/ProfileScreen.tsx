@@ -1,17 +1,9 @@
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { Avatar, Button, Card, Rating } from '../components';
-import { currentPlayer, friends } from '../mockData';
+import { Avatar, Button, Card, PROVISIONAL_GAMES, Rating } from '../components';
+import { currentPlayer, friends, recentGames } from '../mockData';
 import { colors } from '../theme';
-
-const attributes = [
-  ['Finishing', 81],
-  ['Shooting', 87],
-  ['Playmaking', 84],
-  ['Defense', 86],
-  ['Rebounding', 74],
-] as const;
 
 export function ProfileScreen({ notify }: { notify: (message: string) => void }) {
   return (
@@ -27,36 +19,41 @@ export function ProfileScreen({ notify }: { notify: (message: string) => void })
           <Text style={styles.handle}>{currentPlayer.handle}</Text>
           <Text style={styles.home}>⌖ Christie Pits · Toronto</Text>
         </View>
-        <Rating value={currentPlayer.rating} />
+        <Rating player={currentPlayer} />
       </View>
 
-      <Card style={styles.archetypeCard}>
+      <Card style={styles.activityCard}>
         <View>
-          <Text style={styles.label}>ARCHETYPE</Text>
-          <Text style={styles.archetype}>{currentPlayer.archetype}</Text>
+          <Text style={styles.label}>ACTIVITY LEVEL</Text>
+          <Text style={styles.activity}>Level 18</Text>
         </View>
-        <View style={styles.level}><Text style={styles.levelText}>LVL 18</Text></View>
         <View style={styles.progressTrack}><View style={styles.progress} /></View>
-        <Text style={styles.progressText}>1,280 XP to level 19</Text>
+        <Text style={styles.progressText}>1,280 XP to level 19 · earned by playing, not winning</Text>
       </Card>
 
       <View style={styles.statsRow}>
         <View><Text style={styles.statValue}>38</Text><Text style={styles.statLabel}>WINS</Text></View>
         <View><Text style={styles.statValue}>12</Text><Text style={styles.statLabel}>LOSSES</Text></View>
-        <View><Text style={styles.statValue}>8</Text><Text style={styles.statLabel}>COURTS</Text></View>
+        <View><Text style={[styles.statValue, styles.green]}>{currentPlayer.reliability}%</Text><Text style={styles.statLabel}>RELIABLE</Text></View>
         <View><Text style={[styles.statValue, styles.orange]}>2</Text><Text style={styles.statLabel}>CROWNS</Text></View>
       </View>
 
-      <Text style={styles.sectionTitle}>Player attributes</Text>
+      <Text style={styles.sectionTitle}>Recent games</Text>
       <Card>
-        {attributes.map(([label, value], index) => (
-          <View key={label} style={[styles.attribute, index < attributes.length - 1 && styles.attributeBorder]}>
-            <Text style={styles.attributeName}>{label}</Text>
-            <View style={styles.attributeTrack}><View style={[styles.attributeFill, { width: `${value}%` }]} /></View>
-            <Text style={styles.attributeValue}>{value}</Text>
+        {recentGames.map((game, index) => (
+          <View key={game.id} style={[styles.gameRow, index < recentGames.length - 1 && styles.rowBorder]}>
+            <Text style={[styles.result, game.result === 'W' ? styles.green : styles.red]}>{game.result}</Text>
+            <View style={styles.gameCopy}>
+              <Text style={styles.gameScore}>{game.score}</Text>
+              <Text style={styles.gameMeta}>{game.mode} · {game.court}</Text>
+            </View>
+            <Text style={[styles.ratingChange, game.ratingChange >= 0 ? styles.green : styles.red]}>
+              {game.ratingChange >= 0 ? '+' : '−'}{Math.abs(game.ratingChange)} OVR
+            </Text>
           </View>
         ))}
       </Card>
+      <Text style={styles.footnote}>OVR changes only from results both sides confirmed. Beating higher-rated players moves it more.</Text>
 
       <View style={styles.sectionRow}>
         <Text style={styles.sectionTitleNoMargin}>Friends</Text>
@@ -64,11 +61,11 @@ export function ProfileScreen({ notify }: { notify: (message: string) => void })
       </View>
       <Card>
         {friends.map((friend, index) => (
-          <View key={friend.id} style={[styles.friendRow, index < friends.length - 1 && styles.attributeBorder]}>
+          <View key={friend.id} style={[styles.friendRow, index < friends.length - 1 && styles.rowBorder]}>
             <Avatar player={friend} size={40} />
             <View style={styles.friendCopy}>
               <Text style={styles.friendName}>{friend.name}</Text>
-              <Text style={styles.friendMeta}>{friend.handle} · {friend.rating} OVR</Text>
+              <Text style={styles.friendMeta}>{friend.handle} · {friend.rating} {friend.ratedGames < PROVISIONAL_GAMES ? 'PROV' : 'OVR'}</Text>
             </View>
             <Text style={styles.chevron}>›</Text>
           </View>
@@ -90,11 +87,9 @@ const styles = StyleSheet.create({
   name: { color: colors.text, fontSize: 21, fontWeight: '900' },
   handle: { color: colors.muted, fontSize: 11, marginTop: 3 },
   home: { color: colors.muted, fontSize: 10, marginTop: 8 },
-  archetypeCard: { marginTop: 20 },
+  activityCard: { marginTop: 20 },
   label: { color: colors.muted, fontSize: 9, fontWeight: '900', letterSpacing: 1.4 },
-  archetype: { color: colors.text, fontSize: 17, fontWeight: '900', marginTop: 5 },
-  level: { position: 'absolute', top: 16, right: 16, backgroundColor: colors.orangeSoft, borderRadius: 10, paddingHorizontal: 9, paddingVertical: 6 },
-  levelText: { color: colors.orange, fontSize: 10, fontWeight: '900' },
+  activity: { color: colors.text, fontSize: 17, fontWeight: '900', marginTop: 5 },
   progressTrack: { height: 5, backgroundColor: colors.border, borderRadius: 3, marginTop: 18, overflow: 'hidden' },
   progress: { height: 5, width: '68%', backgroundColor: colors.orange, borderRadius: 3 },
   progressText: { color: colors.muted, fontSize: 9, marginTop: 6, textAlign: 'right' },
@@ -102,13 +97,17 @@ const styles = StyleSheet.create({
   statValue: { color: colors.text, fontSize: 22, fontWeight: '900', textAlign: 'center' },
   statLabel: { color: colors.muted, fontSize: 8, fontWeight: '800', letterSpacing: 1, marginTop: 4 },
   orange: { color: colors.orange },
+  green: { color: colors.green },
+  red: { color: colors.red },
   sectionTitle: { color: colors.text, fontSize: 18, fontWeight: '800', marginTop: 29, marginBottom: 12 },
-  attribute: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11 },
-  attributeBorder: { borderBottomWidth: 1, borderBottomColor: colors.border },
-  attributeName: { color: colors.text, fontSize: 12, fontWeight: '700', width: 90 },
-  attributeTrack: { flex: 1, height: 5, backgroundColor: colors.border, borderRadius: 3, overflow: 'hidden' },
-  attributeFill: { height: 5, backgroundColor: colors.orange, borderRadius: 3 },
-  attributeValue: { color: colors.text, width: 30, textAlign: 'right', fontSize: 12, fontWeight: '900' },
+  rowBorder: { borderBottomWidth: 1, borderBottomColor: colors.border },
+  gameRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11 },
+  result: { fontSize: 15, fontWeight: '900', width: 24 },
+  gameCopy: { flex: 1 },
+  gameScore: { color: colors.text, fontSize: 13, fontWeight: '800' },
+  gameMeta: { color: colors.muted, fontSize: 10, marginTop: 3 },
+  ratingChange: { fontSize: 12, fontWeight: '900' },
+  footnote: { color: colors.muted, fontSize: 10, marginTop: 8, lineHeight: 15 },
   sectionRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 29, marginBottom: 12 },
   sectionTitleNoMargin: { color: colors.text, fontSize: 18, fontWeight: '800' },
   addFriend: { color: colors.orange, fontSize: 12, fontWeight: '800' },

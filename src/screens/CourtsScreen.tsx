@@ -36,8 +36,8 @@ function CourtDetail({ court, onBack, notify }: { court: Court; onBack: () => vo
           <>
             <Avatar player={king} size={74} />
             <Text style={styles.kingName}>{king.name}</Text>
-            <Text style={styles.kingType}>{king.archetype} · {king.record}</Text>
-            <View style={styles.kingRating}><Rating value={king.rating} /></View>
+            <Text style={styles.kingType}>{king.record}</Text>
+            <View style={styles.kingRating}><Rating player={king} /></View>
             <Button label="Challenge the king" onPress={() => notify(`Challenge sent to ${king.name}.`)} />
             <Text style={styles.rule}>Beat the current king in a verified 1v1 at this court to take the crown.</Text>
           </>
@@ -72,9 +72,9 @@ function CourtDetail({ court, onBack, notify }: { court: Court; onBack: () => vo
               <Avatar player={player} size={39} />
               <View style={styles.rankCopy}>
                 <Text style={styles.rankName}>{player.name}{player.id === 'me' ? '  (You)' : ''}</Text>
-                <Text style={styles.rankMeta}>{player.wins} wins · {player.archetype}</Text>
+                <Text style={styles.rankMeta}>{player.record}</Text>
               </View>
-              <Rating value={player.rating} small />
+              <Rating player={player} small />
             </View>
           ))
         )}

@@ -1,4 +1,4 @@
-import { Coordinate, Court, OpenGame, Player, Squad } from './types';
+import { Coordinate, Court, OpenGame, Player, RecentGame, Squad } from './types';
 
 // Downtown Toronto; used for court search when location permission is denied or unavailable.
 export const defaultLocation: Coordinate = { latitude: 43.6578, longitude: -79.4128 };
@@ -9,7 +9,8 @@ export const currentPlayer: Player = {
   handle: '@marcusgetsuckets',
   initials: 'MR',
   rating: 84,
-  archetype: '2-Way Shot Creator',
+  ratedGames: 50,
+  reliability: 96,
   record: '38–12',
   wins: 38,
   accent: '#FF5A1F',
@@ -17,12 +18,22 @@ export const currentPlayer: Player = {
 };
 
 const players: Player[] = [
-  { id: 'p1', name: 'Jay Thompson', handle: '@jayt', initials: 'JT', rating: 92, archetype: 'Floor General', record: '64–8', wins: 64, accent: '#705CFF', online: true },
-  { id: 'p2', name: 'Andre Lewis', handle: '@drelew', initials: 'AL', rating: 89, archetype: '3-Level Scorer', record: '51–15', wins: 51, accent: '#2489FF', online: true },
-  { id: 'p3', name: 'Noah Williams', handle: '@noahw', initials: 'NW', rating: 87, archetype: 'Lockdown Defender', record: '46–18', wins: 46, accent: '#26A36B' },
-  { id: 'p4', name: 'Darius King', handle: '@dking', initials: 'DK', rating: 86, archetype: 'Inside-Out Threat', record: '43–19', wins: 43, accent: '#E848A1', online: true },
-  { id: 'p5', name: 'Eli Brooks', handle: '@elib', initials: 'EB', rating: 82, archetype: 'Glass Cleaner', record: '33–21', wins: 33, accent: '#C17B31' },
-  { id: 'p6', name: 'Sam Patel', handle: '@samp', initials: 'SP', rating: 80, archetype: 'Sharpshooter', record: '28–22', wins: 28, accent: '#4B9A8B', online: true },
+  { id: 'p1', name: 'Jay Thompson', handle: '@jayt', initials: 'JT', rating: 92, ratedGames: 72, reliability: 98, record: '64–8', wins: 64, accent: '#705CFF', online: true },
+  { id: 'p2', name: 'Andre Lewis', handle: '@drelew', initials: 'AL', rating: 89, ratedGames: 66, reliability: 91, record: '51–15', wins: 51, accent: '#2489FF', online: true },
+  { id: 'p3', name: 'Noah Williams', handle: '@noahw', initials: 'NW', rating: 87, ratedGames: 64, reliability: 94, record: '46–18', wins: 46, accent: '#26A36B' },
+  { id: 'p4', name: 'Darius King', handle: '@dking', initials: 'DK', rating: 86, ratedGames: 62, reliability: 88, record: '43–19', wins: 43, accent: '#E848A1', online: true },
+  { id: 'p5', name: 'Eli Brooks', handle: '@elib', initials: 'EB', rating: 82, ratedGames: 54, reliability: 90, record: '33–21', wins: 33, accent: '#C17B31' },
+  // Still provisional: fewer than PROVISIONAL_GAMES confirmed games.
+  { id: 'p6', name: 'Sam Patel', handle: '@samp', initials: 'SP', rating: 80, ratedGames: 7, reliability: 100, record: '5–2', wins: 5, accent: '#4B9A8B', online: true },
+];
+
+// Marcus's latest confirmed games, newest first. Each shows how much it moved his rating.
+export const recentGames: RecentGame[] = [
+  { id: 'r1', mode: '1v1', court: 'Christie Pits', result: 'W', score: '21–17', ratingChange: 2 },
+  { id: 'r2', mode: '3v3', court: 'Christie Pits', result: 'W', score: '21–19', ratingChange: 1 },
+  { id: 'r3', mode: '1v1', court: 'Stanley Park', result: 'L', score: '18–21', ratingChange: -1 },
+  { id: 'r4', mode: '5v5', court: 'Trinity Bellwoods', result: 'W', score: '21–14', ratingChange: 3 },
+  { id: 'r5', mode: '3v3', court: 'Stanley Park', result: 'L', score: '15–21', ratingChange: -2 },
 ];
 
 export const friends = [players[1]!, players[2]!, players[3]!, players[5]!];
@@ -50,7 +61,7 @@ export const courts: Court[] = [
     courts: 2,
     activity: 'Active',
     king: players[1]!,
-    leaderboard: [players[1]!, players[2]!, players[3]!, currentPlayer, players[5]!],
+    leaderboard: [players[1]!, players[2]!, players[3]!, currentPlayer, players[4]!],
   },
   {
     id: 'trinity',

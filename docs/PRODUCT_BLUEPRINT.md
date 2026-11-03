@@ -6,7 +6,7 @@
 2. They add friends or discover similarly rated players nearby.
 3. They join a 1v1 game or create a 2–5 player squad.
 4. Both sides agree on a court and start time.
-5. The game is confirmed by both captains; stats and the result are submitted.
+5. One side enters the final score; the other side confirms it with one tap.
 6. The server updates player ratings, court standings, and any crown change.
 
 ## Important product rules
@@ -21,24 +21,26 @@
 
 ## Rating framework
 
-The UI exposes an NBA 2K-style overall rating, but the first production algorithm should stay legible:
+The UI exposes an NBA 2K-style overall rating (OVR), but it only measures what pickup basketball can actually record: who won, confirmed by both sides. There are no attributes, archetypes, or box-score stats, because nobody keeps stats at a pickup run and self-reported numbers are easy to inflate.
 
-- 55% verified win/loss performance, adjusted for opponent strength
-- 25% efficiency statistics appropriate to game mode
-- 10% teammate/opponent sportsmanship confirmation
-- 10% activity and recency, with a conservative decay cap
+- **Results only.** OVR comes from confirmed wins and losses with an opponent-adjusted (Glicko-style) rating, shown on a 40–99 scale. Beating a stronger player gains more; losing to a weaker one costs more.
+- **Team games.** Compare the two teams' average ratings; every player on the winning side gains and every player on the losing side drops.
+- **Provisional start.** New players start at 70 and show "PROV" for their first 10 confirmed games, while the rating moves faster to settle. Inactivity widens the rating's uncertainty instead of lowering the number.
+- **Reliability is separate.** Attendance and result confirmations produce a reliability %, shown on the profile. Low reliability can block ranked games, but it never changes OVR.
+- **Team OVR** is the average of the members' ratings.
+- **Activity level (XP)** rewards playing, not winning, and is labelled so it isn't confused with skill.
 
-Use different stat weights for 1v1 and team games. Rating changes should be bounded per game, protected against repeat-opponent farming, and auditable from a player's match history.
+Rating changes should be bounded per game, protected against repeat-opponent farming, and listed in the player's recent games so every change is explainable.
 
 ## Backend domains
 
-- `profiles`: identity, rating, archetype, privacy preferences
+- `profiles`: identity, rating and rating uncertainty, reliability, privacy preferences
 - `friendships`: requested, accepted, blocked states
 - `courts`: coordinates, amenities, verification state
 - `court_presence`: expiring court-level check-ins
 - `squads` and `squad_members`: rosters and captain permissions
 - `games` and `game_participants`: mode, court, time, ranked/casual state
-- `game_results` and `player_game_stats`: confirmation and rating inputs
+- `game_results`: final score, submitter, confirmations, disputes, and resulting rating changes
 - `court_rankings`: materialized leaderboard results
 - `crown_challenges`: challenger, incumbent, scheduled game, outcome
 

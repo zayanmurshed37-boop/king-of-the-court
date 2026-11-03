@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { Avatar, Button, Card, Rating } from '../components';
+import { Avatar, Button, Card, PROVISIONAL_GAMES, Rating } from '../components';
 import { friends, squad } from '../mockData';
 import { colors, radius } from '../theme';
 import { GameMode } from '../types';
@@ -11,6 +11,7 @@ const sizes: GameMode[] = ['2v2', '3v3', '4v4', '5v5'];
 export function SquadScreen({ notify }: { notify: (message: string) => void }) {
   const [mode, setMode] = useState<GameMode>(squad.mode);
   const [invited, setInvited] = useState<string[]>([]);
+  const teamRating = Math.round(squad.members.reduce((sum, member) => sum + member.rating, 0) / squad.members.length);
 
   const invite = (id: string, name: string) => {
     setInvited((value) => [...value, id]);
@@ -33,7 +34,7 @@ export function SquadScreen({ notify }: { notify: (message: string) => void }) {
         <View style={styles.divider} />
         <View><Text style={styles.recordValue}>{squad.losses}</Text><Text style={styles.recordLabel}>LOSSES</Text></View>
         <View style={styles.divider} />
-        <View><Text style={[styles.recordValue, styles.orange]}>87</Text><Text style={styles.recordLabel}>TEAM OVR</Text></View>
+        <View><Text style={[styles.recordValue, styles.orange]}>{teamRating}</Text><Text style={styles.recordLabel}>TEAM OVR</Text></View>
       </Card>
 
       <Text style={styles.sectionLabel}>GAME SIZE</Text>
@@ -55,9 +56,9 @@ export function SquadScreen({ notify }: { notify: (message: string) => void }) {
           <Avatar player={member} />
           <View style={styles.memberCopy}>
             <Text style={styles.memberName}>{member.name}{member.id === 'me' ? '  (Captain)' : ''}</Text>
-            <Text style={styles.memberType}>{member.archetype}</Text>
+            <Text style={styles.memberType}>{member.record}</Text>
           </View>
-          <Rating value={member.rating} small />
+          <Rating player={member} small />
         </Card>
       ))}
 
@@ -80,7 +81,7 @@ export function SquadScreen({ notify }: { notify: (message: string) => void }) {
             <Avatar player={friend} size={42} />
             <View style={styles.memberCopy}>
               <Text style={styles.memberName}>{friend.name}</Text>
-              <Text style={styles.memberType}>{friend.rating} OVR · {friend.archetype}</Text>
+              <Text style={styles.memberType}>{friend.rating} {friend.ratedGames < PROVISIONAL_GAMES ? 'PROV' : 'OVR'} · {friend.record}</Text>
             </View>
             <Button compact variant={wasInvited ? 'secondary' : 'primary'} label={wasInvited ? 'Invited' : 'Invite'} disabled={wasInvited} onPress={() => invite(friend.id, friend.name)} />
           </View>

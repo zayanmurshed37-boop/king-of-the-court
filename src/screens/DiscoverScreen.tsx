@@ -64,9 +64,9 @@ export function DiscoverScreen({ notify }: { notify: (message: string) => void }
               <Avatar player={game.host} size={44} />
               <View style={styles.hostCopy}>
                 <Text style={styles.hostName}>{game.host.name}</Text>
-                <Text style={styles.hostType}>{game.host.archetype}</Text>
+                <Text style={styles.hostType}>{game.host.record}</Text>
               </View>
-              <Rating value={game.host.rating} small />
+              <Rating player={game.host} small />
             </View>
             <Button label={isJoined ? 'Request sent' : game.mode === '1v1' ? 'Accept challenge' : 'Request to join'} onPress={() => join(game.id)} disabled={isJoined} />
           </Card>

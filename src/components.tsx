@@ -24,12 +24,17 @@ export function Avatar({ player, size = 46 }: { player: Player; size?: number })
   );
 }
 
-export function Rating({ value, small = false }: { value: number; small?: boolean }) {
-  const tone = value >= 90 ? colors.yellow : value >= 84 ? colors.orange : colors.green;
+// Confirmed games before a rating settles; until then it moves faster and is marked provisional.
+export const PROVISIONAL_GAMES = 10;
+
+export function Rating({ player, small = false }: { player: Player; small?: boolean }) {
+  const value = player.rating;
+  const provisional = player.ratedGames < PROVISIONAL_GAMES;
+  const tone = provisional ? colors.muted : value >= 90 ? colors.yellow : value >= 84 ? colors.orange : colors.green;
   return (
     <View style={[styles.rating, { borderColor: tone }, small && styles.ratingSmall]}>
       <Text style={[styles.ratingValue, { color: tone }, small && styles.ratingValueSmall]}>{value}</Text>
-      <Text style={[styles.ratingLabel, small && styles.ratingLabelSmall]}>OVR</Text>
+      <Text style={[styles.ratingLabel, small && styles.ratingLabelSmall]}>{provisional ? 'PROV' : 'OVR'}</Text>
     </View>
   );
 }

@@ -25,9 +25,9 @@ export function HomeScreen({ navigate, notify }: { navigate: (tab: string) => vo
           <View>
             <Text style={styles.heroLabel}>MY PLAYER</Text>
             <Text style={styles.heroName}>{currentPlayer.name}</Text>
-            <Text style={styles.heroArchetype}>{currentPlayer.archetype}</Text>
+            <Text style={styles.heroHandle}>{currentPlayer.handle}</Text>
           </View>
-          <Rating value={currentPlayer.rating} />
+          <Rating player={currentPlayer} />
         </View>
         <View style={styles.heroStats}>
           <View><Text style={styles.statValue}>38–12</Text><Text style={styles.statLabel}>RECORD</Text></View>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   heroLabel: { color: colors.orange, fontSize: 10, letterSpacing: 1.7, fontWeight: '900' },
   heroName: { color: colors.text, fontSize: 20, fontWeight: '900', marginTop: 5 },
-  heroArchetype: { color: colors.muted, fontSize: 12, marginTop: 3 },
+  heroHandle: { color: colors.muted, fontSize: 12, marginTop: 3 },
   heroStats: { flexDirection: 'row', marginTop: 24, alignItems: 'center', justifyContent: 'space-between' },
   statValue: { color: colors.text, fontSize: 17, fontWeight: '900' },
   statLabel: { color: colors.muted, fontSize: 8, fontWeight: '800', letterSpacing: 1, marginTop: 3 },

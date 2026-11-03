@@ -53,7 +53,7 @@ Open **Squad**, switch from 3v3 to 5v5, and invite a friend.
 
 ### 55–65 seconds — player identity
 
-Open **Me** and scroll through attributes and friends.
+Open **Me** and scroll through recent games, reliability, and friends.
 
 > The prototype connects player identity, performance, relationships, and place in one mobile experience.
 
